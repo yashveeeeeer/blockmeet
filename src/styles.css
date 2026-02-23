@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    image-rendering: pixelated;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: #1a1a2e;
+    font-family: "Press Start 2P", monospace;
+    color: #e0e0e0;
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1a1a2e;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #4ecca3;
+    border: 2px solid #1a1a2e;
+  }
+}
+
+@layer components {
+  .pixel-border {
+    border: 4px solid currentColor;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+  }
+
+  .pixel-card {
+    @apply relative bg-pixel-dark/90 backdrop-blur-sm border-4 border-pixel-green/40;
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.4);
+  }
+
+  .crt-effect {
+    position: relative;
+  }
+  .crt-effect::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.1) 0px,
+      rgba(0, 0, 0, 0.1) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+  .crt-effect::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 60%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .pixel-btn {
+    @apply font-pixel text-xs px-6 py-4 border-4 transition-all duration-150 cursor-pointer select-none;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+  }
+  .pixel-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 6px 0px rgba(0, 0, 0, 0.5);
+  }
+  .pixel-btn:active {
+    transform: translateY(2px);
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+  }
+
+  .xp-bar-bg {
+    @apply w-full h-4 bg-pixel-dark border-2 border-pixel-green/40;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  .xp-bar-fill {
+    @apply h-full bg-pixel-gold transition-all duration-500;
+  }
+}
+
+@layer utilities {
+  .text-shadow-pixel {
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
