@@ -202,14 +202,19 @@ export default function App() {
               {SITE.subtitle}
             </motion.p>
             <CTAButtons />
-            <motion.p
-              className="font-pixel text-[6px] text-gray-600 mt-6"
+            <motion.div
+              className="mt-6 flex justify-center"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: 0.35 }}
               transition={{ delay: 1.2 }}
             >
-              ↓ Scroll to explore
-            </motion.p>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400">
+                <path d="M18 11V6a2 2 0 0 0-4 0v1" />
+                <path d="M14 10V4a2 2 0 0 0-4 0v6" />
+                <path d="M10 10.5V6a2 2 0 0 0-4 0v8" />
+                <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-5.7-2.4L3.2 15a1.5 1.5 0 0 1 2.4-1.8L8 16" />
+              </svg>
+            </motion.div>
           </motion.div>
         </section>
 
