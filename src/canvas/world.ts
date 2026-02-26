@@ -1352,13 +1352,12 @@ export function renderFrame(state: WorldState, time: number, dt: number) {
     drawParticles(ctx, state.particles, time);
   }
 
-  if (state.soundEnabled && !state.musicPlayer) {
-    state.musicPlayer = new MusicPlayer();
-    state.musicPlayer.start();
-  } else if (state.soundEnabled && state.musicPlayer && !state.musicPlayer.playing) {
-    state.musicPlayer.start();
-  } else if (!state.soundEnabled && state.musicPlayer && state.musicPlayer.playing) {
-    state.musicPlayer.stop();
+  if (state.musicPlayer) {
+    if (state.soundEnabled && !state.musicPlayer.playing) {
+      state.musicPlayer.start();
+    } else if (!state.soundEnabled && state.musicPlayer.playing) {
+      state.musicPlayer.stop();
+    }
   }
 }
 

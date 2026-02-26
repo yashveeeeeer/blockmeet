@@ -38,6 +38,7 @@ export default function App() {
   const worldRef = useRef<WorldState | null>(null);
   const lastTimeRef = useRef(0);
 
+  const [entered, setEntered] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [crtOn, setCrtOn] = useState(false);
   const [perfMode, setPerfMode] = useState(false);
@@ -106,19 +107,10 @@ export default function App() {
     if (worldRef.current) worldRef.current.soundEnabled = soundOn;
   }, [soundOn]);
 
-  useEffect(() => {
-    const handler = () => {
-      if (worldRef.current) startMusic(worldRef.current);
-      document.removeEventListener("click", handler, true);
-      document.removeEventListener("touchstart", handler, true);
-    };
-    document.addEventListener("click", handler, { capture: true, once: true });
-    document.addEventListener("touchstart", handler, { capture: true, once: true });
-    return () => {
-      document.removeEventListener("click", handler, true);
-      document.removeEventListener("touchstart", handler, true);
-    };
-  }, []);
+  const handleEnter = () => {
+    setEntered(true);
+    if (worldRef.current) startMusic(worldRef.current);
+  };
 
   useEffect(() => {
     if (worldRef.current) worldRef.current.performanceMode = perfMode;
@@ -309,6 +301,49 @@ export default function App() {
       </div>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} />
+
+      {!entered && (
+        <motion.div
+          className="fixed inset-0 z-[200] bg-black/95 flex flex-col items-center justify-center cursor-pointer select-none"
+          onClick={handleEnter}
+          onTouchEnd={(e) => { e.preventDefault(); handleEnter(); }}
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.h1
+            className="font-pixel text-3xl sm:text-5xl text-pixel-gold text-shadow-pixel mb-3"
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5, type: "spring" }}
+          >
+            {SITE.title}
+          </motion.h1>
+          <motion.p
+            className="font-pixel text-[8px] sm:text-[10px] text-gray-500 mb-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {SITE.subtitle}
+          </motion.p>
+          <motion.div
+            className="font-pixel text-[9px] sm:text-xs text-pixel-green border-2 border-pixel-green/50 px-6 py-3 hover:bg-pixel-green/10 transition-colors"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          >
+            TAP TO ENTER
+          </motion.div>
+          <motion.p
+            className="font-pixel text-[6px] text-gray-600 mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.6 }}
+            transition={{ delay: 1, repeat: Infinity, repeatType: "reverse", duration: 1.5 }}
+          >
+            music will play
+          </motion.p>
+        </motion.div>
+      )}
     </div>
   );
 }
