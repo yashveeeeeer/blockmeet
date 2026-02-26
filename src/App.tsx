@@ -311,21 +311,13 @@ export default function App() {
           exit={{ opacity: 0 }}
         >
           <motion.h1
-            className="font-pixel text-3xl sm:text-5xl text-pixel-gold text-shadow-pixel mb-3"
+            className="font-pixel text-sm sm:text-2xl text-pixel-gold text-shadow-pixel mb-10 px-6 leading-relaxed text-center max-w-md"
             initial={{ scale: 0.7, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, type: "spring" }}
           >
-            {SITE.title}
+            Oh, so you are here to book the meeting
           </motion.h1>
-          <motion.p
-            className="font-pixel text-[8px] sm:text-[10px] text-gray-500 mb-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            {SITE.subtitle}
-          </motion.p>
           <motion.div
             className="font-pixel text-[9px] sm:text-xs text-pixel-green border-2 border-pixel-green/50 px-6 py-3 hover:bg-pixel-green/10 transition-colors"
             initial={{ opacity: 0, y: 10 }}
