@@ -6,7 +6,6 @@ import {
   resizeWorld,
   renderFrame,
   destroyWorld,
-  startMusic,
   WorldState,
   isNightTime,
 } from "./canvas/world";
@@ -38,9 +37,6 @@ export default function App() {
   const worldRef = useRef<WorldState | null>(null);
   const lastTimeRef = useRef(0);
 
-  const isDesktop = typeof window !== "undefined" &&
-    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const [entered, setEntered] = useState(isDesktop);
   const [soundOn, setSoundOn] = useState(true);
   const [crtOn, setCrtOn] = useState(false);
   const [perfMode, setPerfMode] = useState(false);
@@ -71,8 +67,6 @@ export default function App() {
     const world = initWorld(canvas);
     if (!world) return;
     worldRef.current = world;
-
-    if (isDesktop) startMusic(world);
 
     world.onXpChange = () => {};
 
@@ -110,11 +104,6 @@ export default function App() {
   useEffect(() => {
     if (worldRef.current) worldRef.current.soundEnabled = soundOn;
   }, [soundOn]);
-
-  const handleEnter = () => {
-    setEntered(true);
-    if (worldRef.current) startMusic(worldRef.current);
-  };
 
   useEffect(() => {
     if (worldRef.current) worldRef.current.performanceMode = perfMode;
@@ -305,41 +294,6 @@ export default function App() {
       </div>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} />
-
-      {!entered && (
-        <motion.div
-          className="fixed inset-0 z-[200] bg-black/95 flex flex-col items-center justify-center cursor-pointer select-none"
-          onClick={handleEnter}
-          onTouchEnd={(e) => { e.preventDefault(); handleEnter(); }}
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <motion.h1
-            className="font-pixel text-sm sm:text-2xl text-pixel-gold text-shadow-pixel mb-10 px-6 leading-relaxed text-center max-w-md"
-            initial={{ scale: 0.7, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, type: "spring" }}
-          >
-            Oh, so you are here to book the meeting
-          </motion.h1>
-          <motion.div
-            className="font-pixel text-[9px] sm:text-xs text-pixel-green border-2 border-pixel-green/50 px-6 py-3 hover:bg-pixel-green/10 transition-colors"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            TAP TO ENTER
-          </motion.div>
-          <motion.p
-            className="font-pixel text-[6px] text-gray-600 mt-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            transition={{ delay: 1, repeat: Infinity, repeatType: "reverse", duration: 1.5 }}
-          >
-            music will play
-          </motion.p>
-        </motion.div>
-      )}
     </div>
   );
 }

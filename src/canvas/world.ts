@@ -287,11 +287,14 @@ class MusicPlayer {
 
   start() {
     if (this.playing) return;
-    this.playing = true;
-    const a = this.createAudio(this.tracks[this.currentIdx], TARGET_VOL);
-    a.addEventListener("ended", () => this.crossfadeToNext(), { once: true });
-    a.play().catch(() => {});
-    this.activeAudio = a;
+    if (!this.activeAudio) {
+      const a = this.createAudio(this.tracks[this.currentIdx], TARGET_VOL);
+      a.addEventListener("ended", () => this.crossfadeToNext(), { once: true });
+      this.activeAudio = a;
+    }
+    this.activeAudio.play().then(() => {
+      this.playing = true;
+    }).catch(() => {});
   }
 
   stop() {
@@ -311,28 +314,12 @@ class MusicPlayer {
     }
   }
 
-  resume() {
-    if (this.activeAudio && this.playing) {
-      this.activeAudio.play().catch(() => {});
-    }
-  }
-
   destroy() {
     this.stop();
     if (this.activeAudio) {
       this.activeAudio.removeAttribute("src");
       this.activeAudio = null;
     }
-  }
-}
-
-export function startMusic(state: WorldState) {
-  if (!state.soundEnabled) return;
-  if (!state.musicPlayer) {
-    state.musicPlayer = new MusicPlayer();
-    state.musicPlayer.start();
-  } else {
-    state.musicPlayer.resume();
   }
 }
 
@@ -1352,12 +1339,15 @@ export function renderFrame(state: WorldState, time: number, dt: number) {
     drawParticles(ctx, state.particles, time);
   }
 
-  if (state.musicPlayer) {
-    if (state.soundEnabled && !state.musicPlayer.playing) {
-      state.musicPlayer.start();
-    } else if (!state.soundEnabled && state.musicPlayer.playing) {
-      state.musicPlayer.stop();
+  if (state.soundEnabled) {
+    if (!state.musicPlayer) {
+      state.musicPlayer = new MusicPlayer();
     }
+    if (!state.musicPlayer.playing) {
+      state.musicPlayer.start();
+    }
+  } else if (state.musicPlayer && state.musicPlayer.playing) {
+    state.musicPlayer.stop();
   }
 }
 
