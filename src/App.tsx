@@ -38,7 +38,9 @@ export default function App() {
   const worldRef = useRef<WorldState | null>(null);
   const lastTimeRef = useRef(0);
 
-  const [entered, setEntered] = useState(false);
+  const isDesktop = typeof window !== "undefined" &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const [entered, setEntered] = useState(isDesktop);
   const [soundOn, setSoundOn] = useState(true);
   const [crtOn, setCrtOn] = useState(false);
   const [perfMode, setPerfMode] = useState(false);
@@ -69,6 +71,8 @@ export default function App() {
     const world = initWorld(canvas);
     if (!world) return;
     worldRef.current = world;
+
+    if (isDesktop) startMusic(world);
 
     world.onXpChange = () => {};
 
