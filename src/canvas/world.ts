@@ -311,12 +311,28 @@ class MusicPlayer {
     }
   }
 
+  resume() {
+    if (this.activeAudio && this.playing) {
+      this.activeAudio.play().catch(() => {});
+    }
+  }
+
   destroy() {
     this.stop();
     if (this.activeAudio) {
       this.activeAudio.removeAttribute("src");
       this.activeAudio = null;
     }
+  }
+}
+
+export function startMusic(state: WorldState) {
+  if (!state.soundEnabled) return;
+  if (!state.musicPlayer) {
+    state.musicPlayer = new MusicPlayer();
+    state.musicPlayer.start();
+  } else {
+    state.musicPlayer.resume();
   }
 }
 

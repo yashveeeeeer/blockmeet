@@ -6,6 +6,7 @@ import {
   resizeWorld,
   renderFrame,
   destroyWorld,
+  startMusic,
   WorldState,
   isNightTime,
 } from "./canvas/world";
@@ -104,6 +105,20 @@ export default function App() {
   useEffect(() => {
     if (worldRef.current) worldRef.current.soundEnabled = soundOn;
   }, [soundOn]);
+
+  useEffect(() => {
+    const handler = () => {
+      if (worldRef.current) startMusic(worldRef.current);
+      document.removeEventListener("click", handler, true);
+      document.removeEventListener("touchstart", handler, true);
+    };
+    document.addEventListener("click", handler, { capture: true, once: true });
+    document.addEventListener("touchstart", handler, { capture: true, once: true });
+    return () => {
+      document.removeEventListener("click", handler, true);
+      document.removeEventListener("touchstart", handler, true);
+    };
+  }, []);
 
   useEffect(() => {
     if (worldRef.current) worldRef.current.performanceMode = perfMode;
